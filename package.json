@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "serve": "npm run build && npm run start",
+    "test": "jest --config jest.config.ts --runInBand"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "reflect-metadata": "^0.2.1",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "^12.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "fastify": "^4.25.2",
+    "inversify": "^6.0.2",
+    "mongoose": "^8.0.3"
+  }
+}
