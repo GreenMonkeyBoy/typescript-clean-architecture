@@ -1,5 +1,8 @@
 import { plainToInstance } from 'class-transformer'
-import { ValidationError as ClassValidatorValidationError, validate } from 'class-validator'
+import {
+  ValidationError as ClassValidatorValidationError,
+  validate,
+} from 'class-validator'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { ValidationError } from '../../../../application/interfaces/validation-error.interface'
@@ -8,7 +11,12 @@ import { ErrorResponsePayload } from '../../response-payload'
 import { BaseRequestHandler } from './base.request-handler'
 
 export class ValidationRequestHandler extends BaseRequestHandler {
-  constructor(private obj: { body?: ClassConstructor<object>; params?: ClassConstructor<object> }) {
+  constructor(
+    private obj: {
+      body?: ClassConstructor<object>
+      params?: ClassConstructor<object>
+    },
+  ) {
     super()
   }
 
@@ -21,13 +29,17 @@ export class ValidationRequestHandler extends BaseRequestHandler {
           ErrorResponsePayload.create({
             status: 400,
             message: `The request must include the params`,
-          })
+          }),
         )
       }
 
-      const paramsvalidationError = await validate(plainToInstance(this.obj.params, req.params))
+      const paramsvalidationError = await validate(
+        plainToInstance(this.obj.params, req.params),
+      )
 
-      classValidatorValidationErrors = classValidatorValidationErrors.concat(paramsvalidationError)
+      classValidatorValidationErrors = classValidatorValidationErrors.concat(
+        paramsvalidationError,
+      )
     }
 
     if (this.obj.body) {
@@ -36,31 +48,36 @@ export class ValidationRequestHandler extends BaseRequestHandler {
           ErrorResponsePayload.create({
             status: 400,
             message: `The request must include a body`,
-          })
+          }),
         )
       }
 
-      const bodyValidationError = await validate(plainToInstance(this.obj.body, req.body), {
-        forbidNonWhitelisted: true,
-        forbidUnknownValues: true,
-      })
+      const bodyValidationError = await validate(
+        plainToInstance(this.obj.body, req.body),
+        {
+          forbidNonWhitelisted: true,
+          forbidUnknownValues: true,
+        },
+      )
 
-      classValidatorValidationErrors = classValidatorValidationErrors.concat(bodyValidationError)
+      classValidatorValidationErrors =
+        classValidatorValidationErrors.concat(bodyValidationError)
     }
 
     if (classValidatorValidationErrors.length > 0) {
-      const validationErrors: ValidationError[] = classValidatorValidationErrors.map((n) => ({
-        property: n.property,
-        value: n.value,
-        constraints: n.constraints,
-      }))
+      const validationErrors: ValidationError[] =
+        classValidatorValidationErrors.map((n) => ({
+          property: n.property,
+          value: n.value,
+          constraints: n.constraints,
+        }))
 
       return reply.status(400).send(
         ErrorResponsePayload.create({
           status: 400,
           message: `The request is invalid`,
           description: validationErrors,
-        })
+        }),
       )
     }
 

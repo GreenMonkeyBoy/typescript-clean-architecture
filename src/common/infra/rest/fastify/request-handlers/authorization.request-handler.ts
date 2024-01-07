@@ -10,7 +10,7 @@ export class AuthorizationRequestHandler extends BaseRequestHandler {
         ErrorResponsePayload.create({
           status: 401,
           message: `Unauthorized`,
-        })
+        }),
       )
     }
 

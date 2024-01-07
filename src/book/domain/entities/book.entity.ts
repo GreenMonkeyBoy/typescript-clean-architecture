@@ -1,4 +1,11 @@
-import { IsDate, IsISBN, IsString, IsUUID, MinDate, MinLength } from 'class-validator'
+import {
+  IsDate,
+  IsISBN,
+  IsString,
+  IsUUID,
+  MinDate,
+  MinLength,
+} from 'class-validator'
 
 import { BookSnapshot } from '../types/book.snapshot'
 import { BookProps, UpdateBookProps } from '../types/books.types'

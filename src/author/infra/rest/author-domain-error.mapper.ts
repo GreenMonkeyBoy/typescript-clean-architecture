@@ -6,14 +6,18 @@ import { AuthorValidationError } from '../../domain/errors/author-validation.err
 
 @injectable()
 export class AuthorDomainErrorMapper {
-  mapAuthorNotFoundError(domainError: AuthorNotFoundError): ErrorResponsePayload {
+  mapAuthorNotFoundError(
+    domainError: AuthorNotFoundError,
+  ): ErrorResponsePayload {
     return ErrorResponsePayload.create({
       status: 404,
       message: domainError.message,
     })
   }
 
-  mapAuthorValidationError(domainError: AuthorValidationError): ErrorResponsePayload {
+  mapAuthorValidationError(
+    domainError: AuthorValidationError,
+  ): ErrorResponsePayload {
     return ErrorResponsePayload.create({
       status: 400,
       message: domainError.message,

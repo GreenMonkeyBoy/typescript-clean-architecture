@@ -11,5 +11,9 @@ export abstract class BaseDomainError<Code extends String> {
    * new BaseDomainError('ENTITY_NOT_FOUND', 'Could not find the user in repository')
    * new BaseDomainError('USER.UNAUTHORIZED', 'The user is not authorized', 'The token is encrypted in non-supported format')
    */
-  constructor(readonly code: Code, readonly message: string, readonly description?: unknown) {}
+  constructor(
+    readonly code: Code,
+    readonly message: string,
+    readonly description?: unknown,
+  ) {}
 }

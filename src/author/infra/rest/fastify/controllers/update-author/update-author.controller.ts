@@ -22,7 +22,8 @@ export class UpdateAuthorController implements Controller {
   mapper = new AuthorDomainErrorMapper()
 
   constructor(
-    @inject(TYPES.UpdateAuthorUseCase) private updateAuthorUseCase: UpdateAuthorUseCase
+    @inject(TYPES.UpdateAuthorUseCase)
+    private updateAuthorUseCase: UpdateAuthorUseCase,
   ) {}
 
   get route(): RouteOptions {
@@ -40,22 +41,33 @@ export class UpdateAuthorController implements Controller {
         return requestHandler.handle(req, reply)
       },
       errorHandler(error, request, reply) {
-        return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+        return reply
+          .status(500)
+          .send(ErrorResponsePayload.createInternalServerError())
       },
       handler: async (req, reply) => {
         const params = plainToInstance(UpdateAuthorParamDto, req.params)
         const body = plainToInstance(UpdateAuthorBodyDto, req.body)
 
-        const result = await this.updateAuthorUseCase.execute({ authorId: params.id, data: body })
+        const result = await this.updateAuthorUseCase.execute({
+          authorId: params.id,
+          data: body,
+        })
 
         if (result.isFailure()) {
           if (result.error.code === AuthorErrors.VALIDATION_ERROR) {
-            return reply.status(400).send(this.mapper.mapAuthorValidationError(result.error))
+            return reply
+              .status(400)
+              .send(this.mapper.mapAuthorValidationError(result.error))
           }
           if (result.error.code === AuthorErrors.NOT_FOUND) {
-            return reply.status(404).send(this.mapper.mapAuthorNotFoundError(result.error))
+            return reply
+              .status(404)
+              .send(this.mapper.mapAuthorNotFoundError(result.error))
           }
-          return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+          return reply
+            .status(500)
+            .send(ErrorResponsePayload.createInternalServerError())
         }
 
         const authorDto = AuthorPresenter.create(result.data)

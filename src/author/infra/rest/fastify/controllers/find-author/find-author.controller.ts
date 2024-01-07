@@ -18,8 +18,10 @@ import { FindAuthorParamDto } from './dto/find-author-params.dto'
 @injectable()
 export class FindAuthorController implements Controller {
   constructor(
-    @inject(TYPES.FindAuthorUseCase) private findAuthorUseCase: FindAuthorUseCase,
-    @inject(TYPES.AuthorDomainErrorMapper) private authorDomainErrorMapper: AuthorDomainErrorMapper
+    @inject(TYPES.FindAuthorUseCase)
+    private findAuthorUseCase: FindAuthorUseCase,
+    @inject(TYPES.AuthorDomainErrorMapper)
+    private authorDomainErrorMapper: AuthorDomainErrorMapper,
   ) {}
 
   get route(): RouteOptions {
@@ -33,7 +35,9 @@ export class FindAuthorController implements Controller {
         return validationRequestHandler.handle(req, reply)
       },
       errorHandler(error, request, reply) {
-        return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+        return reply
+          .status(500)
+          .send(ErrorResponsePayload.createInternalServerError())
       },
       handler: async (req, reply) => {
         const params = plainToInstance(FindAuthorParamDto, req.params)
@@ -44,9 +48,15 @@ export class FindAuthorController implements Controller {
           if (result.error.code === AuthorErrors.NOT_FOUND) {
             return reply
               .status(404)
-              .send(this.authorDomainErrorMapper.mapAuthorNotFoundError(result.error))
+              .send(
+                this.authorDomainErrorMapper.mapAuthorNotFoundError(
+                  result.error,
+                ),
+              )
           }
-          return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+          return reply
+            .status(500)
+            .send(ErrorResponsePayload.createInternalServerError())
         }
 
         const authorDto = AuthorPresenter.create(result.data)

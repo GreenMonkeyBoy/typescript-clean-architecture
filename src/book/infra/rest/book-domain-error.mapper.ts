@@ -13,7 +13,9 @@ export class BookDomainErrorMapper {
     })
   }
 
-  mapBookValidationError(domainError: BookValidationError): ErrorResponsePayload {
+  mapBookValidationError(
+    domainError: BookValidationError,
+  ): ErrorResponsePayload {
     return ErrorResponsePayload.create({
       status: 400,
       message: domainError.message,

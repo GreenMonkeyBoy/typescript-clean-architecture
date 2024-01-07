@@ -1,4 +1,8 @@
-import Fastify, { FastifyInstance, RawServerDefault, RouteOptions } from 'fastify'
+import Fastify, {
+  FastifyInstance,
+  RawServerDefault,
+  RouteOptions,
+} from 'fastify'
 import { injectable } from 'inversify'
 
 @injectable()

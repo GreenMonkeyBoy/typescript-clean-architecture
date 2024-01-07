@@ -1,9 +1,9 @@
-import "reflect-metadata";
+import 'reflect-metadata'
 
-import { App } from "./app";
+import { App } from './app'
 
 async function main() {
-  await App.create();
+  await App.create()
 }
 
-main();
+main()

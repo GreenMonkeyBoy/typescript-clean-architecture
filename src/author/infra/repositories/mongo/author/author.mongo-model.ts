@@ -1,22 +1,22 @@
-import { Severity, modelOptions, prop } from "@typegoose/typegoose";
+import { Severity, modelOptions, prop } from '@typegoose/typegoose'
 
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class AuthorMongoModel {
   @prop()
-  _id!: string;
+  _id!: string
 
   @prop()
-  firstName!: string;
+  firstName!: string
 
   @prop()
-  lastName!: string;
+  lastName!: string
 
   @prop()
-  birthDate!: Date;
+  birthDate!: Date
 
   @prop()
-  createdAt!: Date;
+  createdAt!: Date
 
   @prop()
-  updatedAt!: Date;
+  updatedAt!: Date
 }

@@ -19,8 +19,10 @@ import { CreateAuthorBodyDto } from './dto/create-author-body.dto'
 @injectable()
 export class CreateAuthorController implements Controller {
   constructor(
-    @inject(TYPES.CreateAuthorUseCase) private createAuthorUseCase: CreateAuthorUseCase,
-    @inject(TYPES.AuthorDomainErrorMapper) private authorDomainErrorMapper: AuthorDomainErrorMapper
+    @inject(TYPES.CreateAuthorUseCase)
+    private createAuthorUseCase: CreateAuthorUseCase,
+    @inject(TYPES.AuthorDomainErrorMapper)
+    private authorDomainErrorMapper: AuthorDomainErrorMapper,
   ) {}
 
   get route(): RouteOptions {
@@ -35,7 +37,9 @@ export class CreateAuthorController implements Controller {
         return requestHandler.handle(req, reply)
       },
       errorHandler(error, request, reply) {
-        return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+        return reply
+          .status(500)
+          .send(ErrorResponsePayload.createInternalServerError())
       },
       handler: async (req, reply) => {
         const body = plainToInstance(CreateAuthorBodyDto, req.body)
@@ -46,9 +50,15 @@ export class CreateAuthorController implements Controller {
           if (result.error.code === AuthorErrors.VALIDATION_ERROR) {
             return reply
               .status(400)
-              .send(this.authorDomainErrorMapper.mapAuthorValidationError(result.error))
+              .send(
+                this.authorDomainErrorMapper.mapAuthorValidationError(
+                  result.error,
+                ),
+              )
           }
-          return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+          return reply
+            .status(500)
+            .send(ErrorResponsePayload.createInternalServerError())
         }
 
         const authorDto = AuthorPresenter.create(result.data)

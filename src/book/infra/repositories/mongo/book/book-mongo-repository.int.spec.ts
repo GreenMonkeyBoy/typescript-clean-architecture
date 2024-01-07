@@ -24,7 +24,9 @@ describe('INT::BookMongoRepository', () => {
   }
 
   beforeAll(async () => {
-    mongoose = (await mongoosea.connect(CONFIG.dbUri, { dbName: CONFIG.dbName })).connection
+    mongoose = (
+      await mongoosea.connect(CONFIG.dbUri, { dbName: CONFIG.dbName })
+    ).connection
     repository = new BookMongoRepository()
     model = mongoose.model<BookMongoModel>('books')
   })

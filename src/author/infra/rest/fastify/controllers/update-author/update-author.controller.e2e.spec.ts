@@ -108,8 +108,12 @@ describe('E2E::UpdateAuthorController', () => {
   it(`should return a 200`, async () => {
     // arrange
     const authorSnapshot = AuthorSnapshotMocker.create()
-    const bookSnapshotA = BookSnapshotMocker.create({ authorId: authorSnapshot.id })
-    const bookSnapshotB = BookSnapshotMocker.create({ authorId: authorSnapshot.id })
+    const bookSnapshotA = BookSnapshotMocker.create({
+      authorId: authorSnapshot.id,
+    })
+    const bookSnapshotB = BookSnapshotMocker.create({
+      authorId: authorSnapshot.id,
+    })
 
     await authorRepository.create(authorSnapshot)
     await bookRepository.create(bookSnapshotA)

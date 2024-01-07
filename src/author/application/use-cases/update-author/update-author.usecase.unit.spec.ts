@@ -33,7 +33,8 @@ describe('UNIT::UpdateAuthorUseCase', () => {
     authorEntityValidator?: AuthorEntityValidator
   }): UpdateAuthorUseCase => {
     authorRepository = data?.authorRepository || AuthorRepositoryMocker.create()
-    authorEntityValidator = data?.authorEntityValidator || EntityValidatorMocker.create()
+    authorEntityValidator =
+      data?.authorEntityValidator || EntityValidatorMocker.create()
 
     return new UpdateAuthorUseCase(authorRepository, authorEntityValidator)
   }
@@ -97,12 +98,25 @@ describe('UNIT::UpdateAuthorUseCase', () => {
 
     // assert
     expect(updateAuthor).toHaveBeenCalledTimes(1)
-    expect(updateAuthor.mock.calls[0][0].id).toEqual(authorEntity.getSnapshot().id)
-    expect(updateAuthor.mock.calls[0][0].firstName).toEqual(createAuthorCommand.data.firstName)
-    expect(updateAuthor.mock.calls[0][0].lastName).toEqual(createAuthorCommand.data.lastName)
-    expect(updateAuthor.mock.calls[0][0].birthDate).toEqual(createAuthorCommand.data.birthDate)
-    expect(updateAuthor.mock.calls[0][0].createdAt).toEqual(authorEntity.getSnapshot().createdAt)
-    expect(updateAuthor.mock.calls[0][0].updatedAt.getTime()).toBeCloseTo(new Date().getTime(), -3)
+    expect(updateAuthor.mock.calls[0][0].id).toEqual(
+      authorEntity.getSnapshot().id,
+    )
+    expect(updateAuthor.mock.calls[0][0].firstName).toEqual(
+      createAuthorCommand.data.firstName,
+    )
+    expect(updateAuthor.mock.calls[0][0].lastName).toEqual(
+      createAuthorCommand.data.lastName,
+    )
+    expect(updateAuthor.mock.calls[0][0].birthDate).toEqual(
+      createAuthorCommand.data.birthDate,
+    )
+    expect(updateAuthor.mock.calls[0][0].createdAt).toEqual(
+      authorEntity.getSnapshot().createdAt,
+    )
+    expect(updateAuthor.mock.calls[0][0].updatedAt.getTime()).toBeCloseTo(
+      new Date().getTime(),
+      -3,
+    )
   })
 
   it(`should return a success result`, async () => {

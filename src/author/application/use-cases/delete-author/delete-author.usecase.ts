@@ -7,7 +7,9 @@ import { AuthorRepository } from '../../interfaces/author-repository.interface'
 
 @injectable()
 export class DeleteAuthorUseCase implements UseCase<void> {
-  constructor(@inject(TYPES.AuthorRepository) private authorRepository: AuthorRepository) {}
+  constructor(
+    @inject(TYPES.AuthorRepository) private authorRepository: AuthorRepository,
+  ) {}
 
   async execute(authorId: string) {
     await this.authorRepository.delete(authorId)

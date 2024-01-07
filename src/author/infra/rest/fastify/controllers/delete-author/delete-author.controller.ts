@@ -13,7 +13,8 @@ import { DeleteAuthorParamDto } from './dto/delete-author-params.dto'
 @injectable()
 export class DeleteAuthorController implements Controller {
   constructor(
-    @inject(TYPES.DeleteAuthorUseCase) private deleteAuthorUseCase: DeleteAuthorUseCase
+    @inject(TYPES.DeleteAuthorUseCase)
+    private deleteAuthorUseCase: DeleteAuthorUseCase,
   ) {}
 
   get route(): RouteOptions {
@@ -30,7 +31,9 @@ export class DeleteAuthorController implements Controller {
         return requestHandler.handle(req, reply)
       },
       errorHandler(error, request, reply) {
-        return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+        return reply
+          .status(500)
+          .send(ErrorResponsePayload.createInternalServerError())
       },
       handler: async (req, reply) => {
         const params = plainToInstance(DeleteAuthorParamDto, req.params)

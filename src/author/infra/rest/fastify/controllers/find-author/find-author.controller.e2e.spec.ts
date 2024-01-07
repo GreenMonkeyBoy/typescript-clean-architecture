@@ -60,15 +60,21 @@ describe('E2E::FindAuthorController', () => {
   it(`should return a 200 response containing the author`, async () => {
     // arrange
     const authorSnapshot = AuthorSnapshotMocker.create()
-    const bookSnapshotA = BookSnapshotMocker.create({ authorId: authorSnapshot.id })
-    const bookSnapshotB = BookSnapshotMocker.create({ authorId: authorSnapshot.id })
+    const bookSnapshotA = BookSnapshotMocker.create({
+      authorId: authorSnapshot.id,
+    })
+    const bookSnapshotB = BookSnapshotMocker.create({
+      authorId: authorSnapshot.id,
+    })
 
     await authorRepository.create(authorSnapshot)
     await bookRepository.create(bookSnapshotA)
     await bookRepository.create(bookSnapshotB)
 
     // act
-    const res = await request(fastifyServer.server)[method](route(authorSnapshot.id))
+    const res = await request(fastifyServer.server)[method](
+      route(authorSnapshot.id),
+    )
 
     // assert
     expect(res.status).toEqual(200)

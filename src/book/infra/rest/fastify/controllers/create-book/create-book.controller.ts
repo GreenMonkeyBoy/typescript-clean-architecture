@@ -19,8 +19,10 @@ import { CreateBookBodyDto } from './dto/create-book-body.dto'
 @injectable()
 export class CreateBookController implements Controller {
   constructor(
-    @inject(TYPES.CreateBookUseCase) private createBookUseCase: CreateBookUseCase,
-    @inject(TYPES.BookDomainErrorMapper) private bookDomainErrorMapper: BookDomainErrorMapper
+    @inject(TYPES.CreateBookUseCase)
+    private createBookUseCase: CreateBookUseCase,
+    @inject(TYPES.BookDomainErrorMapper)
+    private bookDomainErrorMapper: BookDomainErrorMapper,
   ) {}
 
   get route(): RouteOptions {
@@ -35,7 +37,9 @@ export class CreateBookController implements Controller {
         return requestHandler.handle(req, reply)
       },
       errorHandler(error, request, reply) {
-        return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+        return reply
+          .status(500)
+          .send(ErrorResponsePayload.createInternalServerError())
       },
       handler: async (req, reply) => {
         const body = plainToInstance(CreateBookBodyDto, req.body)
@@ -46,9 +50,13 @@ export class CreateBookController implements Controller {
           if (result.error.code === BookErrors.VALIDATION_ERROR) {
             return reply
               .status(400)
-              .send(this.bookDomainErrorMapper.mapBookValidationError(result.error))
+              .send(
+                this.bookDomainErrorMapper.mapBookValidationError(result.error),
+              )
           }
-          return reply.status(500).send(ErrorResponsePayload.createInternalServerError())
+          return reply
+            .status(500)
+            .send(ErrorResponsePayload.createInternalServerError())
         }
 
         const bookDto = BookPresenter.create(result.data)

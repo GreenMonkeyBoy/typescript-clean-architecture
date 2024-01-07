@@ -21,7 +21,11 @@ export class ErrorResponsePayload {
     }
   }
 
-  static create(data: { status: number; message: string; description?: unknown }) {
+  static create(data: {
+    status: number
+    message: string
+    description?: unknown
+  }) {
     return new ErrorResponsePayload(data.status, data.message, data.description)
   }
 

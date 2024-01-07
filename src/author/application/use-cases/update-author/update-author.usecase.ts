@@ -1,7 +1,10 @@
 import { inject, injectable } from 'inversify'
 
 import { UseCase } from '../../../../common/application/types/use-case'
-import { ResultFailure, ResultSuccess } from '../../../../common/domain/results/result'
+import {
+  ResultFailure,
+  ResultSuccess,
+} from '../../../../common/domain/results/result'
 import { TYPES } from '../../../../common/infra/ioc/types'
 import { AuthorNotFoundError } from '../../../domain/errors/author-not-found.error'
 import { AuthorValidationError } from '../../../domain/errors/author-validation.error'
@@ -12,12 +15,13 @@ import { UpdateAuthorCommand } from './update-author.command'
 
 @injectable()
 export class UpdateAuthorUseCase
-  implements UseCase<AuthorSnapshot, AuthorNotFoundError | AuthorValidationError>
+  implements
+    UseCase<AuthorSnapshot, AuthorNotFoundError | AuthorValidationError>
 {
   constructor(
     @inject(TYPES.AuthorRepository) private authorRepository: AuthorRepository,
     @inject(TYPES.EntityValidator)
-    private authorEntityValidator: AuthorEntityValidator
+    private authorEntityValidator: AuthorEntityValidator,
   ) {}
 
   async execute(command: UpdateAuthorCommand) {
@@ -29,7 +33,8 @@ export class UpdateAuthorUseCase
 
     const updatedAuthorEntity = authorEntity.update({ ...command.data })
 
-    const validationErrors = this.authorEntityValidator.validate(updatedAuthorEntity)
+    const validationErrors =
+      this.authorEntityValidator.validate(updatedAuthorEntity)
 
     if (validationErrors) {
       return new ResultFailure(new AuthorValidationError(validationErrors))

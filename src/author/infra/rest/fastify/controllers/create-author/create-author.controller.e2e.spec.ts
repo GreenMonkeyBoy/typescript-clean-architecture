@@ -1,115 +1,115 @@
-import { faker } from "@faker-js/faker";
-import request from "supertest";
+import { faker } from '@faker-js/faker'
+import request from 'supertest'
 
-import { App } from "../../../../../../app";
-import { TYPES } from "../../../../../../common/infra/ioc/types";
-import { FastifyServer } from "../../../../../../common/infra/rest/fastify/fastify-server";
-import { AuthorRepository } from "../../../../../application/interfaces/author-repository.interface";
-import { AuthorDto } from "../../../author.dto";
-import { CreateAuthorBodyDto } from "./dto/create-author-body.dto";
+import { App } from '../../../../../../app'
+import { TYPES } from '../../../../../../common/infra/ioc/types'
+import { FastifyServer } from '../../../../../../common/infra/rest/fastify/fastify-server'
+import { AuthorRepository } from '../../../../../application/interfaces/author-repository.interface'
+import { AuthorDto } from '../../../author.dto'
+import { CreateAuthorBodyDto } from './dto/create-author-body.dto'
 
 class CreateAuthorBodyDtoMocker {
   static create(
-    data?: Partial<CreateAuthorBodyDtoMocker>
+    data?: Partial<CreateAuthorBodyDtoMocker>,
   ): CreateAuthorBodyDto {
     return {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       birthDate: faker.date.past(),
       ...data,
-    };
+    }
   }
 }
 
-describe("E2E::CreateAuthorController", () => {
-  let app: App;
-  let authorRepository: AuthorRepository;
-  let fastifyServer: FastifyServer;
+describe('E2E::CreateAuthorController', () => {
+  let app: App
+  let authorRepository: AuthorRepository
+  let fastifyServer: FastifyServer
 
-  const method = "post";
-  const route = () => "/authors";
+  const method = 'post'
+  const route = () => '/authors'
 
   beforeAll(async () => {
-    app = await App.createTestApp();
+    app = await App.createTestApp()
 
-    fastifyServer = app.get<FastifyServer>(TYPES.FastifyServer);
-    authorRepository = app.get<AuthorRepository>(TYPES.AuthorRepository);
-  });
+    fastifyServer = app.get<FastifyServer>(TYPES.FastifyServer)
+    authorRepository = app.get<AuthorRepository>(TYPES.AuthorRepository)
+  })
 
   afterEach(async () => {
-    await app.clearDatabase();
-  });
+    await app.clearDatabase()
+  })
 
   afterAll(async () => {
-    await app.destroy();
-  });
+    await app.destroy()
+  })
 
   it(`when the body is missing, should return 400`, async () => {
     // act
-    const res = await request(fastifyServer.server)[method](route());
+    const res = await request(fastifyServer.server)[method](route())
 
     // assert
-    expect(res.status).toEqual(400);
-    expect(res.body.error.message).toEqual(`The request must include a body`);
-  });
+    expect(res.status).toEqual(400)
+    expect(res.body.error.message).toEqual(`The request must include a body`)
+  })
 
   it(`when the body is invalid, should return a 400`, async () => {
     // act
-    const res = await request(fastifyServer.server)[method](route()).send({});
+    const res = await request(fastifyServer.server)[method](route()).send({})
 
     // assert
-    expect(res.status).toEqual(400);
-    expect(res.body.error).toBeDefined();
-  });
+    expect(res.status).toEqual(400)
+    expect(res.body.error).toBeDefined()
+  })
 
   it(`when the 'Authorization' header is not defined, should return a 401`, async () => {
     // arrange
-    const body = CreateAuthorBodyDtoMocker.create();
+    const body = CreateAuthorBodyDtoMocker.create()
 
     // act
-    const res = await request(fastifyServer.server)[method](route()).send(body);
+    const res = await request(fastifyServer.server)[method](route()).send(body)
 
     // assert
-    expect(res.status).toEqual(401);
-    expect(res.body.error).toBeDefined();
-  });
+    expect(res.status).toEqual(401)
+    expect(res.body.error).toBeDefined()
+  })
 
   it(`when the repository throws an unexpected error, should return a 500 response`, async () => {
     // arrange
-    const body = CreateAuthorBodyDtoMocker.create();
+    const body = CreateAuthorBodyDtoMocker.create()
 
-    jest.spyOn(authorRepository, "create").mockImplementationOnce(() => {
-      throw new Error(faker.lorem.words());
-    });
+    jest.spyOn(authorRepository, 'create').mockImplementationOnce(() => {
+      throw new Error(faker.lorem.words())
+    })
 
     // act
     const res = await request(fastifyServer.server)
       [method](route())
       .send(body)
-      .set("Authorization", "token");
+      .set('Authorization', 'token')
 
     // assert
-    expect(res.status).toEqual(500);
-    expect(res.body.error.message).toEqual(`Internal Server Error`);
-  });
+    expect(res.status).toEqual(500)
+    expect(res.body.error.message).toEqual(`Internal Server Error`)
+  })
 
   it(`should return a 201`, async () => {
     // arrange
-    const body = CreateAuthorBodyDtoMocker.create();
+    const body = CreateAuthorBodyDtoMocker.create()
 
     // act
     const res = await request(fastifyServer.server)
       [method](route())
       .send(body)
-      .set("Authorization", "token");
+      .set('Authorization', 'token')
 
     // assert
-    expect(res.status).toEqual(201);
+    expect(res.status).toEqual(201)
     expect(res.body.data).toEqual<AuthorDto>({
       id: expect.any(String),
       firstName: body.firstName,
       lastName: body.lastName,
       createdAt: expect.any(String),
-    });
-  });
-});
+    })
+  })
+})

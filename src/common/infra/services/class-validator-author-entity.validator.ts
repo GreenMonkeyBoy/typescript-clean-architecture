@@ -5,7 +5,9 @@ import { EntityValidator } from '../../application/interfaces/entity-validator.i
 import { EntityValidationError } from '../../application/types/entity-validation-error'
 
 @injectable()
-export class ClassValidatorEntityValidator<T extends object> implements EntityValidator<T> {
+export class ClassValidatorEntityValidator<T extends object>
+  implements EntityValidator<T>
+{
   validate(entity: T) {
     const errors = validateSync(entity)
 
